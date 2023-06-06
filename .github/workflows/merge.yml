@@ -23,7 +23,9 @@ jobs:
           git config --get-all remote.origin.fetch
           git config --unset-all remote.origin.fetch
           git fetch --prune --all
+          git remote add origin https://github.com/saru2020/clickup_GHA_poc.git
           git fetch origin pre-release:pre-release
           git checkout -b origin/pre-release
+          git pull origin/pre-release
           git merge main
           git push -u origin pre-release
