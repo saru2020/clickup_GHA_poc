@@ -12,14 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Merge main into testing
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git config user.name "saru2020"
-          git config user.email "saru2020@gmail.com"
-          git fetch
-          git checkout testing
-          git branch --set-upstream-to=origin/testing
-          git merge main
-          git push origin testing
+      - name: Merge development -> testing
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: main
+          target_branch: testing
+          github_token: ${{ secrets.GITHUB_TOKEN }}
