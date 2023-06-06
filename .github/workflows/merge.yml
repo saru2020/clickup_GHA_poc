@@ -19,7 +19,7 @@ jobs:
           git config user.name "saru2020"
           git config user.email "saru2020@gmail.com"
           git remote update
-          git fetch
+          git fetch origin pre-release:pre-release
           git checkout -b origin/pre-release
           git merge main
           git push -u origin pre-release
