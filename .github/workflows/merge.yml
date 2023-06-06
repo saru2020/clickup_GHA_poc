@@ -1,8 +1,8 @@
-name: Do Something That Needs Scheduled
+name: Merge from main to testing
 
 on:
   repository_dispatch:
-    types: do-something
+    types: merge-main-to-testing
 
 jobs:
   merge_changes:
@@ -16,8 +16,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name "saru2020"
+          git config user.email "saru2020@gmail.com"
           git fetch
           git checkout testing
           git merge main
