@@ -19,6 +19,10 @@ jobs:
           git config user.name "saru2020"
           git config user.email "saru2020@gmail.com"
           git remote update
+          git fetch --prune --all
+          git config --get-all remote.origin.fetch
+          git config --unset-all remote.origin.fetch
+          git fetch --prune --all
           git fetch origin pre-release:pre-release
           git checkout -b origin/pre-release
           git merge main
