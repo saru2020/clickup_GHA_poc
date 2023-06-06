@@ -1,8 +1,8 @@
-name: Merge from main to prerelease
+name: Merge from main to testing
 
 on:
   repository_dispatch:
-    types: merge-main-to-prerelease
+    types: merge-main-to-testing
 
 jobs:
   merge_changes:
@@ -12,10 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Merge development -> pre-release
+      - name: Merge development -> testing
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: main
-          target_branch: pre-release
+          target_branch: testing
           github_token: ${{ secrets.GITHUB_TOKEN }}
