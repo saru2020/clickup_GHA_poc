@@ -27,4 +27,5 @@ jobs:
           git checkout -b origin/pre-release
           git pull origin/pre-release
           git merge main
+          git branch --list
           git push -u origin pre-release
