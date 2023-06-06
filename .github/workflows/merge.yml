@@ -12,20 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Merge main into pre-release
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git config user.name "saru2020"
-          git config user.email "saru2020@gmail.com"
-          git remote update
-          git fetch --prune --all
-          git config --get-all remote.origin.fetch
-          git config --unset-all remote.origin.fetch
-          git fetch --prune --all
-          git fetch origin pre-release:pre-release
-          git checkout -b origin/pre-release
-          git pull origin/pre-release
-          git merge main
-          git branch --list
-          git push -u origin pre-release
+      - name: Merge development -> pre-release
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: main
+          target_branch: pre-release
+          github_token: ${{ secrets.GITHUB_TOKEN }}
