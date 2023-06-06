@@ -18,6 +18,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git fetch
           git checkout testing
           git merge main
           git push origin testing
