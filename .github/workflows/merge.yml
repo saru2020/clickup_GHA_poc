@@ -1,0 +1,20 @@
+name: Merge Changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge_changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Merge main into testing
+        run: |
+          git checkout testing
+          git merge main
+          git push origin testing
