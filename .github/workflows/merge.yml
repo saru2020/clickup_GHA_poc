@@ -18,8 +18,8 @@ jobs:
         run: |
           git config user.name "saru2020"
           git config user.email "saru2020@gmail.com"
+          git remote update
           git fetch
-          git checkout testing
-          git branch --set-upstream-to=origin/testing
+          git checkout --track origin/testing
           git merge main
           git push -u origin testing
