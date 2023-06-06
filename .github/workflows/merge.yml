@@ -22,4 +22,4 @@ jobs:
           git checkout testing
           git branch --set-upstream-to=origin/testing
           git merge main
-          git push origin testing
+          git push -u origin testing
