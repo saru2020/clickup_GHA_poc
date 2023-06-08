@@ -1,31 +1,31 @@
-name: Create Pull Request
+# name: Create Pull Request
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  create_pull_request:
-    runs-on: ubuntu-latest
+# jobs:
+#   create_pull_request:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Create Pull Request
-        run: |
-          # Set up your GitHub token
-          GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+#       - name: Create Pull Request
+#         run: |
+#           # Set up your GitHub token
+#           GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           
-          # Define the repository and branch names
-          REPO_OWNER="saru2020"
-          REPO_NAME="clickup_GHA_poc"
-          SOURCE_BRANCH="main"
-          TARGET_BRANCH="testing"
-          PULL_REQUEST_TITLE="main to testing"
+#           # Define the repository and branch names
+#           REPO_OWNER="saru2020"
+#           REPO_NAME="clickup_GHA_poc"
+#           SOURCE_BRANCH="main"
+#           TARGET_BRANCH="testing"
+#           PULL_REQUEST_TITLE="main to testing"
           
-          # Create the pull request using the GitHub API
-          API_URL="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls"
-          DATA="{\"title\":\"$PULL_REQUEST_TITLE\",\"head\":\"$SOURCE_BRANCH\",\"base\":\"$TARGET_BRANCH\"}"
-          curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -d "$DATA" "$API_URL"
+#           # Create the pull request using the GitHub API
+#           API_URL="https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/pulls"
+#           DATA="{\"title\":\"$PULL_REQUEST_TITLE\",\"head\":\"$SOURCE_BRANCH\",\"base\":\"$TARGET_BRANCH\"}"
+#           curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -d "$DATA" "$API_URL"

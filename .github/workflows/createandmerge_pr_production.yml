@@ -1,0 +1,44 @@
+name: Create and Merge Pull Request
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_and_merge_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create Pull Request
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "title": "Merge main into testing",
+              "head": "main",
+              "base": "testing"
+            }' \
+            https://api.github.com/repos/${{ github.repository }}/pulls
+
+      - name: Merge Pull Request
+        run: |
+          PR_NUMBER=$(curl -X GET \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/pulls?head=main\&base=testing \
+            | jq -r '.[0].number')
+
+          curl -X PUT \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "commit_title": "Merge main into testing",
+              "commit_message": "Automatically merged by GitHub Actions",
+              "sha": "$(curl -X GET \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/commits \
+                | jq -r '.[0].sha')"
+            }' \
+            https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/merge
