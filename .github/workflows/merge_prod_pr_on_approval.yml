@@ -1,0 +1,35 @@
+name: Merge Pull Request on Approval
+on:
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  merge_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Merge Pull Request
+        id: merge_pull_request
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        run: |
+          echo "$github"
+          echo "$github.repository_owner"
+          echo "$github.repository"
+          BASE_URL="https://api.github.com"
+          #  OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.repository }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+
+          # Merge Pull Request
+          curl -X PUT "$BASE_URL/repos/$REPO/pulls/$PR_NUMBER/merge" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "commit_title": "Merge pull request #$PR_NUMBER",
+              "commit_message": "Auto-merge pull request #$PR_NUMBER",
+              "merge_method": "merge"
+            }'
