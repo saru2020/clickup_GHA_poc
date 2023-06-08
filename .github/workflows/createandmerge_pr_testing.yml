@@ -32,7 +32,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const prNumber = "${{ steps.create_pull_request.outputs.pull-request-number }}";
-            const octokit = require("@octokit/rest")();
+            const octokit = require("@octokit/rest");
             octokit.authenticate({
               type: "token",
               token: process.env.GITHUB_TOKEN,
