@@ -30,6 +30,7 @@ jobs:
           # Extract Pull Request Number
           PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
+          echo "::set-output name=pr_number::$PR_NUMBER"
           echo "Created Pull Request #$PR_NUMBER"
 
       - name: Merge Pull Request
@@ -39,6 +40,9 @@ jobs:
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
           # BRANCH="deploy/testing"
+
+          PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+
           url="$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge"
           echo "$url"
 
