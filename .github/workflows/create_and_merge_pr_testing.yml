@@ -1,11 +1,11 @@
-name: Create and Merge Pull Request
+name: Create Pull Request
 on:
   push:
     branches:
       - main
 
 jobs:
-  create_and_merge_pull_request:
+  create_pull_request:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,10 +14,9 @@ jobs:
 
       - name: Create Pull Request
         id: create_pull_request
-        uses: peter-evans/create-pull-request@v3
+        uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deploy/testing
+          destinationBranch: deploy/testing
+          sourceBranch: main
           title: "Merge main into deploy/testing"
-          body: "This pull request merges changes from the main branch into the deploy/production branch."
-          draft: false
+          body: "This pull request merges changes from the main branch into the deploy/testing branch."
