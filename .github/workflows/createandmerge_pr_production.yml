@@ -5,40 +5,37 @@ on:
       - main
 
 jobs:
-  create_and_merge_pr:
+  create_and_merge_pull_request:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Create Pull Request
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "title": "Merge main into testing",
-              "head": "main",
-              "base": "testing"
-            }' \
-            https://api.github.com/repos/${{ github.repository }}/pulls
+        id: create_pull_request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: deploy/testing
+          commit-message: "Merge main into deploy/testing"
+          title: "Merge main into deploy/testing"
+          body: "This pull request merges changes from the main branch into the deploy/testing branch."
+          labels: "automerge"
 
       - name: Merge Pull Request
-        run: |
-          PR_NUMBER=$(curl -X GET \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/pulls?head=main\&base=testing \
-            | jq -r '.[0].number')
-
-          curl -X PUT \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "commit_title": "Merge main into testing",
-              "commit_message": "Automatically merged by GitHub Actions",
-              "sha": "$(curl -X GET \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/commits \
-                | jq -r '.[0].sha')"
-            }' \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/merge
+        uses: actions/github-script@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = "${{ steps.create_pull_request.outputs.pull-request-number }}";
+            const octokit = require("@octokit/rest")();
+            octokit.authenticate({
+              type: "token",
+              token: process.env.GITHUB_TOKEN,
+            });
+            octokit.pulls.merge({
+              owner: "${{ github.repository_owner }}",
+              repo: "${{ github.repository }}",
+              pull_number: prNumber
+            });
