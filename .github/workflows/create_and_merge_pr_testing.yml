@@ -43,7 +43,7 @@ jobs:
           echo "$url"
 
           # Merge Pull Request
-          curl -L -X PUT url \
+          curl -L -X PUT $url \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
