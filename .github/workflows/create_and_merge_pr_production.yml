@@ -1,0 +1,33 @@
+name: Create and Merge Pull Request
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_and_merge_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create Pull Request
+        id: create_pull_request
+        run: |
+          BASE_URL="https://api.github.com"
+          OWNER="saru2020"
+          REPO="clickup_GHA_poc"
+          BRANCH="deploy/production"
+
+          # Create Pull Request
+          PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$OWNER/$REPO/pulls" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "title": "Merge main into deploy/production",
+              "head": "main",
+              "base": "'"$BRANCH"'"
+            }')
+
+          # Extract Pull Request Number
+          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+
+          echo "Created Pull Request #$PR_NUMBER"
