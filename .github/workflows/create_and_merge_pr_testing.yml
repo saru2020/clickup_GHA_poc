@@ -19,4 +19,4 @@ jobs:
           destinationBranch: deploy/testing
           sourceBranch: main
           title: "Merge main into deploy/testing"
-          body: "This pull request merges changes from the main branch into the deploy/testing branch."
+          body: "This pull request merges changes from the main branch into the deploy/testing branch.."
