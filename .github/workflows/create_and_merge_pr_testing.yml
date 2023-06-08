@@ -30,6 +30,7 @@ jobs:
           # Extract Pull Request Number
           PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
+          echo "::set-output name=pr_number::$PR_NUMBER"
           echo "Created Pull Request #$PR_NUMBER"
 
       - name: Merge Pull Request
@@ -38,15 +39,18 @@ jobs:
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
-          BRANCH="deploy/testing"
+          # BRANCH="deploy/testing"
+
+          PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+
+          url="$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge"
+          echo "$url"
 
           # Merge Pull Request
-          curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
+          curl -L -X PUT $url \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
               "commit_title": "Merge pull request #$PR_NUMBER",
-              "commit_message": "Auto-merge pull request #$PR_NUMBER",
-              "sha": "main",
-              "merge_method": "merge"
+              "commit_message": "Auto-merge pull request #$PR_NUMBER"
             }'
