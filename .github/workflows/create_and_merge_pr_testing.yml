@@ -1,0 +1,27 @@
+name: Create and Merge Pull Request
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_and_merge_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install @octokit/rest
+
+      - name: Create Pull Request
+        id: create_pull_request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: deploy/testing
+          commit-message: "Merge main into deploy/testing"
+          title: "Merge main into deploy/testing"
+          body: "This pull request merges changes from the main branch into the deploy/testing branch."
+          labels: "automerge"
