@@ -31,12 +31,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = "${{ steps.create_pull_request.outputs.pull-request-number }}";
-            const octokit = require("@octokit/rest");
-            octokit.authenticate({
-              type: "token",
-              token: process.env.GITHUB_TOKEN,
+            const { Octokit } = require("@octokit/rest");
+            const octokit = new Octokit({
+              auth: process.env.GITHUB_TOKEN
             });
+            const prNumber = "${{ steps.create_pull_request.outputs.pull-request-number }}";
             octokit.pulls.merge({
               owner: "${{ github.repository_owner }}",
               repo: "${{ github.repository }}",
