@@ -39,9 +39,11 @@ jobs:
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
           # BRANCH="deploy/testing"
+          url="$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge"
+          echo "$url"
 
           # Merge Pull Request
-          curl -L -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
+          curl -L -X PUT url \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
