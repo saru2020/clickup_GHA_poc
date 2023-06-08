@@ -9,15 +9,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Create Pull Request
         id: create_pull_request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deploy/testing
-          title: "Merge main into deploy/testing"
-          body: "This pull request merges changes from the main branch into the deploy/production branch."
-          draft: false
+        run: |
+          BASE_URL="https://api.github.com"
+          OWNER="saru2020"
+          REPO="clickup_GHA_poc"
+          BRANCH="deploy/testing"
+
+          # Create Pull Request
+          PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$OWNER/$REPO/pulls" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "title": "Merge main into deploy/testing",
+              "head": "main",
+              "base": "'"$BRANCH"'"
+            }')
+
+          # Extract Pull Request Number
+          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+
+          echo "Created Pull Request #$PR_NUMBER"
+
+      - name: Merge Pull Request
+        id: merge_pull_request
+        run: |
+          BASE_URL="https://api.github.com"
+          OWNER="saru2020"
+          REPO="clickup_GHA_poc"
+          BRANCH="deploy/testing"
+
+          # Merge Pull Request
+          curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "commit_title": "Merge pull request #$PR_NUMBER",
+              "commit_message": "Auto-merge pull request #$PR_NUMBER",
+              "sha": "main",
+              "merge_method": "merge"
+            }'
