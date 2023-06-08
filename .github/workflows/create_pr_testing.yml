@@ -22,7 +22,7 @@ jobs:
           REPO_OWNER="immocapital"
           REPO_NAME="clickup_GHA_poc"
           SOURCE_BRANCH="main"
-          TARGET_BRANCH="deploy/testing"
+          TARGET_BRANCH="testing"
           PULL_REQUEST_TITLE="main to testing"
           
           # Create the pull request using the GitHub API
