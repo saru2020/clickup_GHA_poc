@@ -38,15 +38,13 @@ jobs:
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
-          BRANCH="deploy/testing"
+          # BRANCH="deploy/testing"
 
           # Merge Pull Request
-          curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
+          curl -L -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
               "commit_title": "Merge pull request #$PR_NUMBER",
-              "commit_message": "Auto-merge pull request #$PR_NUMBER",
-              "sha": "main",
-              "merge_method": "merge"
+              "commit_message": "Auto-merge pull request #$PR_NUMBER"
             }'
