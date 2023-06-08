@@ -12,6 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install dependencies
+        run: npm install @octokit/rest
+
       - name: Create Pull Request
         id: create_pull_request
         uses: peter-evans/create-pull-request@v3
