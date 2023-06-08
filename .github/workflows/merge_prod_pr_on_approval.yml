@@ -16,13 +16,16 @@ jobs:
         id: merge_pull_request
         if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
         run: |
+          echo "$github"
+          echo "$github.repository_owner"
+          echo "$github.repository"
           BASE_URL="https://api.github.com"
-          OWNER="${{ github.repository_owner }}"
+          #  OWNER="${{ github.repository_owner }}"
           REPO="${{ github.repository }}"
           PR_NUMBER="${{ github.event.pull_request.number }}"
 
           # Merge Pull Request
-          curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
+          curl -X PUT "$BASE_URL/repos/$REPO/pulls/$PR_NUMBER/merge" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
