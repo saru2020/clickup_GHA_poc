@@ -19,7 +19,7 @@ jobs:
           GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           
           # Define the repository and branch names
-          REPO_OWNER="immocapital"
+          REPO_OWNER="saru2020"
           REPO_NAME="clickup_GHA_poc"
           SOURCE_BRANCH="main"
           TARGET_BRANCH="testing"
