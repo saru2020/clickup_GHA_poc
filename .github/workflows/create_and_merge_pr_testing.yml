@@ -12,16 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install @octokit/rest
-
       - name: Create Pull Request
         id: create_pull_request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deploy/testing
-          commit-message: "Merge main into deploy/testing"
-          title: "Merge main into deploy/testing"
-          body: "This pull request merges changes from the main branch into the deploy/testing branch."
-          labels: "automerge"
+          branch: deploy/production
+          title: "Merge main into deploy/production"
+          body: "This pull request merges changes from the main branch into the deploy/production branch."
+          draft: false
+
+      - name: Merge Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          destinationBranch: deploy/production
+          sourceBranch: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          deleteBranch: false
