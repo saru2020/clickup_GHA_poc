@@ -1,11 +1,11 @@
-name: Create and Merge Pull Request
+name: Create Production Pull Request
 on:
   push:
     branches:
       - main
 
 jobs:
-  create_and_merge_pull_request:
+  create_pull_request:
     runs-on: ubuntu-latest
 
     steps:
