@@ -21,11 +21,3 @@ jobs:
           title: "Merge main into deploy/production"
           body: "This pull request merges changes from the main branch into the deploy/production branch."
           draft: true
-
-      - name: Merge Pull Request
-        uses: repo-sync/pull-request@v2
-        with:
-          destinationBranch: deploy/production
-          sourceBranch: main
-          token: ${{ secrets.GITHUB_TOKEN }}
-          deleteBranch: false
