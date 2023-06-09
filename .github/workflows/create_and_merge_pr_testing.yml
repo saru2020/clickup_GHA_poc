@@ -74,10 +74,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin
-          git checkout -b deploy/testing
+          # git checkout -b deploy/testing
           git pull --no-ff --no-commit origin deploy/testing
-          # Additional steps to handle the merged changes
-
-          git commit -m "Merge changes from deploy/testing to main"
-          # git remote add origin https://github.com/saru2020/clickup_GHA_poc.git
+          # git commit -m "Merge changes from deploy/testing to main"
           git push origin main
