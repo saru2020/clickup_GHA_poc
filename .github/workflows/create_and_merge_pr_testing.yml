@@ -28,7 +28,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json")
 
-          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.[0].number')
+          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.[0].number // empty')
 
           if [[ -n "$PR_NUMBER" ]]; then
             echo "Found Pull Request #$PR_NUMBER"
