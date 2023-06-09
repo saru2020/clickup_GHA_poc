@@ -13,9 +13,6 @@ jobs:
         id: merge_pull_request
         if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
         run: |
-          git fetch origin deploy/production:deploy/production
-          git merge deploy/production --no-commit --no-ff
-
           # echo "$github"
           # echo "$github.repository_owner"
           # echo "$github.repository"
