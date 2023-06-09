@@ -14,7 +14,6 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           BASE_URL="https://api.github.com"
-          # OWNER="saru2020"
           REPO="${{ github.repository }}"
           BRANCH="deploy/testing"
 
@@ -31,7 +30,6 @@ jobs:
           # Extract Pull Request Number
           PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
-          # echo "::set-output name=pr_number::$PR_NUMBER"
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
 
           echo "Created Pull Request #$PR_NUMBER"
@@ -41,10 +39,8 @@ jobs:
         id: merge_pull_request
         run: |
           BASE_URL="https://api.github.com"
-          # OWNER="saru2020"
           REPO="${{ github.repository }}"
           
-          # PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
           PR_NUMBER="$PR_NUMBER"
 
           echo "steps.create_pull_request.outputs.pr_number: $PR_NUMBER"
