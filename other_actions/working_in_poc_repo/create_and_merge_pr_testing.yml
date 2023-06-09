@@ -61,3 +61,20 @@ jobs:
               "commit_title": "Merge pull request #$PR_NUMBER",
               "commit_message": "Auto-merge pull request #$PR_NUMBER"
             }'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+                  
+      - name: Pull Changes from deploy/testing to main
+        id: pull_changes_from_testing_into_main
+        # if: steps.merge_pull_request.outputs.result == 'merged'
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin
+          git pull --no-ff --no-commit origin deploy/testing
+          git status
+          git commit -m"merge from deploy/testing into main"
+          git push origin main
