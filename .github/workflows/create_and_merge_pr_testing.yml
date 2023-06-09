@@ -1,47 +1,70 @@
-name: Merge Pull Request from main to deploy/testing
-
+name: Create and Merge Pull Request
 on:
   push:
     branches:
       - main
 
 jobs:
-  merge_pull_request:
+  create_and_merge_pull_request:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Merge Pull Request
-        id: merge_pull_request
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Create Pull Request
+        id: create_pull_request
         run: |
           BASE_URL="https://api.github.com"
-          OWNER="${{ github.repository_owner }}"
-          REPO="${{ github.repository }}"
-          SOURCE_BRANCH="main"
-          TARGET_BRANCH="deploy/testing"
+          OWNER="saru2020"
+          REPO="clickup_GHA_poc"
+          BRANCH="deploy/testing"
 
-          # Get Pull Request Number
-          PR_NUMBER=$(curl -s "$BASE_URL/repos/$OWNER/$REPO/pulls?state=closed&base=$TARGET_BRANCH&head=$OWNER:$SOURCE_BRANCH" \
+          # Create Pull Request
+          PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$OWNER/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" | jq -r '.[0].number')
+            -H "Content-Type: application/json" \
+            -d '{
+              "title": "Merge main into deploy/testing",
+              "head": "main",
+              "base": "'"$BRANCH"'"
+            }')
 
-          if [[ -n "$PR_NUMBER" ]]; then
-            # Merge Pull Request
-            curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d '{
-                "commit_title": "Merge pull request #'$PR_NUMBER'",
-                "commit_message": "Auto-merge pull request #'$PR_NUMBER'",
-                "merge_method": "merge"
-              }'
-          else
-            echo "No Pull Request found"
-          fi
+          # Extract Pull Request Number
+          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
+          # echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+          echo "Created Pull Request #$PR_NUMBER"
+
+      - name: Merge Pull Request to deploy/testing
+        id: merge_pull_request
+        run: |
+          BASE_URL="https://api.github.com"
+          OWNER="saru2020"
+          REPO="clickup_GHA_poc"
+          # BRANCH="deploy/testing"
+          
+          # PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+          PR_NUMBER="$PR_NUMBER"
+
+          echo "steps.create_pull_request.outputs.pr_number: $PR_NUMBER"
+
+          url="$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge"
+          echo "$url"
+
+          # Merge Pull Request
+          curl -L -X PUT $url \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "commit_title": "Merge pull request #$PR_NUMBER",
+              "commit_message": "Auto-merge pull request #$PR_NUMBER"
+            }'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+                  
       - name: Pull Changes from deploy/testing to main
         if: steps.merge_pull_request.outputs.result == 'merged'
         run: |
