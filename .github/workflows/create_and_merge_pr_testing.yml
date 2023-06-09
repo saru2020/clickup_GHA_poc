@@ -31,6 +31,8 @@ jobs:
           PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
           echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
           echo "Created Pull Request #$PR_NUMBER"
 
       - name: Merge Pull Request to deploy/testing
@@ -41,7 +43,8 @@ jobs:
           REPO="clickup_GHA_poc"
           # BRANCH="deploy/testing"
           
-          PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+          # PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+          PR_NUMBER="$PR_NUMBER"
 
           echo "steps.create_pull_request.outputs.pr_number: $PR_NUMBER"
 
@@ -56,3 +59,17 @@ jobs:
               "commit_title": "Merge pull request #$PR_NUMBER",
               "commit_message": "Auto-merge pull request #$PR_NUMBER"
             }'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+                  
+      - name: Pull Changes from deploy/testing
+        if: steps.merge_pull_request.outputs.result == 'merged'
+        run: |
+          git fetch origin
+          git checkout -b deploy/testing origin/deploy/testing
+          git merge --no-ff --no-commit origin/deploy/testing
+          # Additional steps to handle the merged changes
+    
