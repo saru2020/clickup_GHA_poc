@@ -62,11 +62,6 @@ jobs:
               "commit_message": "Auto-merge pull request #$PR_NUMBER"
             }'
 
-      - name: wait
-        uses: GuillaumeFalourd/wait-sleep-action@v1
-        with:
-          time: '5' # for 5 seconds
-
       - name: Checkout code
         uses: actions/checkout@v2
         with:
