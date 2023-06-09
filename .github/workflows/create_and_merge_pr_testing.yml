@@ -33,15 +33,17 @@ jobs:
           echo "::set-output name=pr_number::$PR_NUMBER"
           echo "Created Pull Request #$PR_NUMBER"
 
-      - name: Merge Pull Request
+      - name: Merge Pull Request to deploy/testing
         id: merge_pull_request
         run: |
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
           # BRANCH="deploy/testing"
-
+          
           PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
+
+          echo "steps.create_pull_request.outputs.pr_number: $PR_NUMBER"
 
           url="$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge"
           echo "$url"
