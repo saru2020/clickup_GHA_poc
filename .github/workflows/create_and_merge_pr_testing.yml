@@ -65,14 +65,15 @@ jobs:
         with:
           fetch-depth: 0
                   
-      - name: Pull Changes from deploy/testing
-        id: pull_changes_into_main
-        #   echo ${{ steps.merge_pull_request.outputs.merge_result }}
-        #   echo ${{ steps.merge_pull_request.outputs.result }}
-        # if: steps.merge_pull_request.outputs.merge_result == 'true'
+      - name: Pull Changes from deploy/testing to main
+        if: steps.merge_pull_request.outputs.result == 'merged'
         run: |
           git fetch origin
-          git checkout -b deploy/testing origin/deploy/testing
+          git checkout -b deploy-testing origin/deploy/testing
           git merge --no-ff --no-commit origin/deploy/testing
           # Additional steps to handle the merged changes
-    
+
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git commit -m "Merge changes from deploy/testing to main"
+          git push origin main
