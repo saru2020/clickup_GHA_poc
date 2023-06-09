@@ -36,6 +36,9 @@ jobs:
       - name: Merge Pull Request to deploy/testing
         id: merge_pull_request
         run: |
+          git fetch origin deploy/testing:deploy/testing
+          git merge deploy/testing --no-commit --no-ff
+
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
