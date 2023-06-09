@@ -24,21 +24,9 @@ jobs:
           TARGET_BRANCH="deploy/testing"
 
           # Get Pull Request Number
-          PR_RESPONSE=$(curl -s "$BASE_URL/repos/$OWNER/$REPO/pulls?state=closed&base=$TARGET_BRANCH&head=$OWNER:$SOURCE_BRANCH" \
+          PR_NUMBER=$(curl -s "$BASE_URL/repos/$OWNER/$REPO/pulls?state=closed&base=$TARGET_BRANCH&head=$OWNER:$SOURCE_BRANCH" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json")
-
-          PR_NUMBER=""
-          for row in $(echo "$PR_RESPONSE" | jq -r '.[] | @base64'); do
-            _jq() {
-              echo "$row" | base64 --decode | jq -r "$1"
-            }
-            PR_NUMBER=$(_jq '.number')
-            if [[ -n "$PR_NUMBER" ]]; then
-              echo "Found Pull Request #$PR_NUMBER"
-              break
-            fi
-          done
+            -H "Accept: application/vnd.github.v3+json" | jq -r '.[0].number')
 
           if [[ -n "$PR_NUMBER" ]]; then
             # Merge Pull Request
