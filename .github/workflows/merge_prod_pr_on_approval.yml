@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Merge Pull Request
         id: merge_pull_request
         if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
@@ -50,6 +47,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch origin
+          git checkout main
           git pull --no-ff --no-commit origin deploy/production
           git status
           git commit -m"merge from deploy/production into main"
