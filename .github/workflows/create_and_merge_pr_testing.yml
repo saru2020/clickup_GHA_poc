@@ -28,11 +28,19 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json")
 
-          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.[0].number // empty')
+          PR_NUMBER=""
+          for row in $(echo "${PR_RESPONSE}" | jq -r '.[] | @base64'); do
+            _jq() {
+              echo "${row}" | base64 --decode | jq -r "${1}"
+            }
+            PR_NUMBER=$(_jq '.number')
+            if [[ -n "$PR_NUMBER" ]]; then
+              echo "Found Pull Request #$PR_NUMBER"
+              break
+            fi
+          done
 
           if [[ -n "$PR_NUMBER" ]]; then
-            echo "Found Pull Request #$PR_NUMBER"
-
             # Merge Pull Request
             curl -X PUT "$BASE_URL/repos/$OWNER/$REPO/pulls/$PR_NUMBER/merge" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
