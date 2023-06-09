@@ -29,9 +29,9 @@ jobs:
             -H "Accept: application/vnd.github.v3+json")
 
           PR_NUMBER=""
-          for row in $(echo "${PR_RESPONSE}" | jq -r '.[] | @base64'); do
+          for row in $(echo "$PR_RESPONSE" | jq -r '.[] | @base64'); do
             _jq() {
-              echo "${row}" | base64 --decode | jq -r "${1}"
+              echo "$row" | base64 --decode | jq -r "$1"
             }
             PR_NUMBER=$(_jq '.number')
             if [[ -n "$PR_NUMBER" ]]; then
@@ -62,4 +62,7 @@ jobs:
           git merge --no-ff --no-commit origin/deploy/testing
           # Additional steps to handle the merged changes
 
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git commit -m "Merge changes from deploy/testing to main"
           git push origin main
