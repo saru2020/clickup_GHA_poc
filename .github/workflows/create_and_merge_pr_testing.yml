@@ -46,8 +46,8 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "Content-Type: application/json" \
               -d '{
-                "commit_title": "Merge pull request #$PR_NUMBER",
-                "commit_message": "Auto-merge pull request #$PR_NUMBER",
+                "commit_title": "Merge pull request #'$PR_NUMBER'",
+                "commit_message": "Auto-merge pull request #'$PR_NUMBER'",
                 "merge_method": "merge"
               }'
           else
@@ -58,7 +58,7 @@ jobs:
         if: steps.merge_pull_request.outputs.result == 'merged'
         run: |
           git fetch origin
-          git checkout -b deploy/testing origin/deploy/testing
+          git checkout -b deploy-testing origin/deploy/testing
           git merge --no-ff --no-commit origin/deploy/testing
           # Additional steps to handle the merged changes
 
