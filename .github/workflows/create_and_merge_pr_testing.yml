@@ -81,4 +81,5 @@ jobs:
           git fetch origin
           git pull --no-ff --no-commit origin deploy/testing
           git status
+          git commit -m"merge from deploy/testing into main"
           git push origin main
