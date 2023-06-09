@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Create Pull Request
         id: create_pull_request
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
@@ -36,6 +37,7 @@ jobs:
           echo "Created Pull Request #$PR_NUMBER"
 
       - name: Merge Pull Request to deploy/testing
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: merge_pull_request
         run: |
           BASE_URL="https://api.github.com"
@@ -71,7 +73,7 @@ jobs:
         run: |
           git fetch origin
           git checkout -b deploy-testing origin/deploy/testing
-          git merge --no-ff --no-commit origin/deploy/testing
+          git pull --no-ff --no-commit origin/deploy/testing
           # Additional steps to handle the merged changes
 
           git config --global user.name "${{ github.actor }}"
