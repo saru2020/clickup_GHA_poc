@@ -1,0 +1,53 @@
+name: Merge Pull Request on Approval
+on:
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  merge_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Merge Pull Request
+        id: merge_pull_request
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        run: |
+          # echo "$github"
+          # echo "$github.repository_owner"
+          # echo "$github.repository"
+          
+          BASE_URL="https://api.github.com"
+          #  OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.repository }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+
+          # Merge Pull Request
+          curl -X PUT "$BASE_URL/repos/$REPO/pulls/$PR_NUMBER/merge" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "commit_title": "Merge pull request #$PR_NUMBER",
+              "commit_message": "Auto-merge pull request #$PR_NUMBER",
+              "merge_method": "merge"
+            }'
+
+      - name: Checkout code
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+                  
+      - name: Pull Changes from deploy/production to main
+        id: pull_changes_from_production_into_main
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        # if: steps.merge_pull_request.outputs.result == 'merged'
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin
+          git checkout main
+          git pull --no-ff --no-commit origin deploy/production
+          git status
+          git commit -m"merge from deploy/production into main"
+          git push origin main
