@@ -36,12 +36,14 @@ jobs:
             }'
 
       - name: Checkout code
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
                   
       - name: Pull Changes from deploy/production to main
         id: pull_changes_from_production_into_main
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
         # if: steps.merge_pull_request.outputs.result == 'merged'
         run: |
           git config --global user.name "${{ github.actor }}"
