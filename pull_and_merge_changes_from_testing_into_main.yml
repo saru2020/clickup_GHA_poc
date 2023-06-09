@@ -1,0 +1,24 @@
+name: pull and merge changes from deploy/testing branch
+on:
+  push:
+    branches:
+      - deploy/testing
+
+jobs:
+  pull_and_merge_changes_from_testing_into_main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Pull Request
+        id: create_pull_request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          commit-message: "Merge deploy/testing into main"
+          title: "Merge deploy/testing into main"
+          body: "This pull request merges changes from the deploy/testing branch into the main branch."
+          labels: "automerge"

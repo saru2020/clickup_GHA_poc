@@ -16,9 +16,13 @@ jobs:
         id: merge_pull_request
         if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
         run: |
-          echo "$github"
-          echo "$github.repository_owner"
-          echo "$github.repository"
+          git fetch origin deploy/production:deploy/production
+          git merge deploy/production --no-commit --no-ff
+
+          # echo "$github"
+          # echo "$github.repository_owner"
+          # echo "$github.repository"
+          
           BASE_URL="https://api.github.com"
           #  OWNER="${{ github.repository_owner }}"
           REPO="${{ github.repository }}"
@@ -33,3 +37,20 @@ jobs:
               "commit_message": "Auto-merge pull request #$PR_NUMBER",
               "merge_method": "merge"
             }'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+                  
+      - name: Pull Changes from deploy/production to main
+        id: pull_changes_from_production_into_main
+        # if: steps.merge_pull_request.outputs.result == 'merged'
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch origin
+          git pull --no-ff --no-commit origin deploy/production
+          git status
+          git commit -m"merge from deploy/production into main"
+          git push origin main
