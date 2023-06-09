@@ -66,9 +66,10 @@ jobs:
           fetch-depth: 0
                   
       - name: Pull Changes from deploy/testing
-          echo ${{ steps.merge_pull_request.outputs.merge_result }}
-          echo ${{ steps.merge_pull_request.outputs.result }}
-        if: steps.merge_pull_request.outputs.merge_result == 'true'
+        id: pull_changes_into_main
+        #   echo ${{ steps.merge_pull_request.outputs.merge_result }}
+        #   echo ${{ steps.merge_pull_request.outputs.result }}
+        # if: steps.merge_pull_request.outputs.merge_result == 'true'
         run: |
           git fetch origin
           git checkout -b deploy/testing origin/deploy/testing
