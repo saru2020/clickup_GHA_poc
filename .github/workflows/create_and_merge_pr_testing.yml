@@ -65,7 +65,7 @@ jobs:
       - name: wait
         uses: GuillaumeFalourd/wait-sleep-action@v1
         with:
-          time: '2' # for 60 seconds
+          time: '5' # for 5 seconds
 
       - name: Checkout code
         uses: actions/checkout@v2
