@@ -79,4 +79,5 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git commit -m "Merge changes from deploy/testing to main"
+          git remote add origin https://github.com/saru2020/clickup_GHA_poc.git
           git push origin main
