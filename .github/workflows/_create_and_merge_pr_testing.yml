@@ -17,9 +17,7 @@ jobs:
           REPO="${{ github.repository }}"
           BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
           SOURCE_BRANCH="${{ github.ref_name }}"
-          echo "SOURCE_BRANCH: $SOURCE_BRANCH"
-          echo "BRANCH: $BRANCH"
-
+          
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
