@@ -27,7 +27,7 @@ runs:
         REPO="${{ inputs.REPO }}"
         DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
         SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
-        # DATA='{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}'
+        DATA='{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}'
         echo "DATA: $DATA"
         URL="$BASE_URL/repos/$REPO/pulls"
         echo "URL: $URL"
@@ -36,9 +36,9 @@ runs:
         PR_RESPONSE=$(curl -X POST "$URL" \
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
-        -d '{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}')
-        # -d "$DATA")
-
+        -d '$DATA')
+        # -d '{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}')
+        
         # Extract Pull Request Number
         echo "PR_RESPONSE: $PR_RESPONSE"
         PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
