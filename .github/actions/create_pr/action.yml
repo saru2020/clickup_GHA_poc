@@ -33,9 +33,9 @@ runs:
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
         -d '{
-            "title": "Merge main into "'"$DESTINATION_BRANCH"'" ",
-            "head": "'"$SOURCE_BRANCH"'",
-            "base": "'"$DESTINATION_BRANCH"'"
+            "title": "Merge main into "$DESTINATION_BRANCH" ",
+            "head": "$SOURCE_BRANCH",
+            "base": "$DESTINATION_BRANCH"
         }')
 
         # Extract Pull Request Number
