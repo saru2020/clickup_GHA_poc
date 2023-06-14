@@ -36,7 +36,7 @@ runs:
         PR_RESPONSE=$(curl -X POST "$URL" \
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
-        -d '{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}'
+        -d '{"title": "Merge main into "'"$DESTINATION_BRANCH"'" ","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}')
         # -d "$DATA")
 
         # Extract Pull Request Number
