@@ -27,16 +27,18 @@ runs:
         REPO="${{ inputs.REPO }}"
         DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
         SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
-        
+        DATA='{
+            "title": "Merge main into "$DESTINATION_BRANCH" ",
+            "head": "$SOURCE_BRANCH",
+            "base": "$DESTINATION_BRANCH"
+        }'
+        echo "DATA: $DATA"
+
         # Create Pull Request
         PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
-        -d '{
-            "title": "Merge main into "$DESTINATION_BRANCH" ",
-            "head": "$SOURCE_BRANCH",
-            "base": "$DESTINATION_BRANCH"
-        }')
+        -d $DATA)
 
         # Extract Pull Request Number
         echo "PR_RESPONSE: $PR_RESPONSE"
