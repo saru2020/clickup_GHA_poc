@@ -39,6 +39,7 @@ runs:
         }')
 
         # Extract Pull Request Number
+        echo "PR_RESPONSE: $PR_RESPONSE"
         PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
 
         echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
