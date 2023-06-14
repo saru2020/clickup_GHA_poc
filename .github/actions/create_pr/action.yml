@@ -1,0 +1,47 @@
+name: "Create PR"
+description: "Create PR"
+
+inputs:
+  SOURCE_BRANCH:
+    description: "source branch from which the PR has to be created"
+    required: true
+  DESTINATION_BRANCH:
+    description: "destination branch to which the PR has to be created"
+    required: true
+  GITHUB_PAT:
+    description: "GitHub PAT"
+    required: true
+  REPO:
+    description: "repo"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Create Pull Request
+      id: create_pull_request
+      shell: bash
+      run: |
+        BASE_URL="https://api.github.com"
+        REPO="${{ inputs.REPO }}"
+        DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
+        SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
+        DATA='{"title": "Merge main into '"$DESTINATION_BRANCH"'","head": "'"$SOURCE_BRANCH"'","base": "'"$DESTINATION_BRANCH"'"}'
+        echo "DATA: $DATA"
+        URL="$BASE_URL/repos/$REPO/pulls"
+        echo "URL: $URL"
+
+        # Create Pull Request
+        PR_RESPONSE=$(curl -X POST "$URL" \
+        -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
+        -H "Content-Type: application/json" \
+        -d "$DATA")
+
+        # Extract Pull Request Number
+        # echo "PR_RESPONSE: $PR_RESPONSE"
+        PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+
+        echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+        echo "Created Pull Request #$PR_NUMBER"

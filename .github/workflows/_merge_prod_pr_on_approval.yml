@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Merge Pull Request
         id: merge_pull_request
-        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == '${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}'
         run: |
           
           BASE_URL="https://api.github.com"

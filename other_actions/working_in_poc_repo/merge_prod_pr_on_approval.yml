@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Merge Pull Request
         id: merge_pull_request
-        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == '${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}'
         run: |
           # echo "$github"
           # echo "$github.repository_owner"
@@ -27,27 +27,27 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "commit_title": "Merge pull request #$PR_NUMBER",
-              "commit_message": "Auto-merge pull request #$PR_NUMBER",
+              "commit_title": "Merge pull request ${{ format('# {0}', $PR_NUMBER) }}",
+              "commit_message": "Auto-merge pull request ${{ format('# {0}', $PR_NUMBER) }}",
               "merge_method": "merge"
             }'
 
       - name: Checkout code
-        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == '${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
                   
-      - name: Pull Changes from deploy/production to main
-        id: pull_changes_from_production_into_main
-        if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
-        # if: steps.merge_pull_request.outputs.result == 'merged'
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin
-          git checkout main
-          git pull --no-ff --no-commit origin deploy/production
-          git status
-          git commit -m"merge from deploy/production into main"
-          git push origin main
+      # - name: Pull Changes from deploy/production to main
+      #   id: pull_changes_from_production_into_main
+      #   if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'deploy/production'
+      #   # if: steps.merge_pull_request.outputs.result == 'merged'
+      #   run: |
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      #     git fetch origin
+      #     git checkout main
+      #     git pull --no-ff --no-commit origin deploy/production
+      #     git status
+      #     git commit -m"merge from deploy/production into main"
+      #     git push origin main

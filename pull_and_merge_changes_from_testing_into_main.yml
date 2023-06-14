@@ -1,8 +1,8 @@
-name: pull and merge changes from deploy/testing branch
+name: pull and merge changes from ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }} branch
 on:
   push:
     branches:
-      - deploy/testing
+      - ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}
 
 jobs:
   pull_and_merge_changes_from_testing_into_main:
@@ -18,7 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          commit-message: "Merge deploy/testing into main"
-          title: "Merge deploy/testing into main"
-          body: "This pull request merges changes from the deploy/testing branch into the main branch."
+          commit-message: "Merge testing into main"
+          title: "Merge ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }} into main"
+          body: "This pull request merges changes from the testing branch into the main branch."
           labels: "automerge"

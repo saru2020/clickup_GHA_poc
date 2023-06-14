@@ -9,24 +9,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Pull Request
-        id: create_pull_request
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Create PR from ${{ github.ref_name }} into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: ./.github/actions/create_pr
+        with:
+          SOURCE_BRANCH: ${{ github.ref_name }}
+          DESTINATION_BRANCH: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+
+      - name: log it
         run: |
-          BASE_URL="https://api.github.com"
-          REPO="${{ github.repository }}"
-          BRANCH="deploy/production"
+          echo "output - created PR: $PR_NUMBER"
 
-          # Create Pull Request
-          PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "title": "Merge main into deploy/production",
-              "head": "main",
-              "base": "'"$BRANCH"'"
-            }')
+      # - name: Create Pull Request
+      #   id: create_pull_request
+      #   run: |
+      #     BASE_URL="https://api.github.com"
+      #     REPO="${{ github.repository }}"
+      #     BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}"
+      #     SOURCE_BRANCH="${{ github.ref_name }}"
 
-          # Extract Pull Request Number
-          PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+      #     # Create Pull Request
+      #     PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
+      #       -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+      #       -H "Content-Type: application/json" \
+      #       -d '{
+      #         "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}",
+      #         "head": "'"$SOURCE_BRANCH"'",
+      #         "base": "'"$BRANCH"'"
+      #       }')
 
-          echo "Created Pull Request #$PR_NUMBER"
+      #     # Extract Pull Request Number
+      #     PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+
+      #     echo "Created Pull Request #$PR_NUMBER"

@@ -16,14 +16,14 @@ jobs:
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
-          BRANCH="deploy/testing"
+          BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
 
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$OWNER/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "title": "Merge main into deploy/testing",
+              "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}",
               "head": "main",
               "base": "'"$BRANCH"'"
             }')
@@ -36,14 +36,14 @@ jobs:
 
           echo "Created Pull Request #$PR_NUMBER"
 
-      - name: Merge Pull Request to deploy/testing
+      - name: Merge Pull Request to ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: merge_pull_request
         run: |
           BASE_URL="https://api.github.com"
           OWNER="saru2020"
           REPO="clickup_GHA_poc"
-          # BRANCH="deploy/testing"
+          # BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
           
           # PR_NUMBER=${{ steps.create_pull_request.outputs.pr_number }}
           PR_NUMBER="$PR_NUMBER"
@@ -67,14 +67,14 @@ jobs:
         with:
           fetch-depth: 0
                   
-      - name: Pull Changes from deploy/testing to main
-        id: pull_changes_from_testing_into_main
-        # if: steps.merge_pull_request.outputs.result == 'merged'
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git fetch origin
-          git pull --no-ff --no-commit origin deploy/testing
-          git status
-          git commit -m"merge from deploy/testing into main"
-          git push origin main
+      # - name: Pull Changes from deploy/testing to main
+      #   id: pull_changes_from_testing_into_main
+      #   # if: steps.merge_pull_request.outputs.result == 'merged'
+      #   run: |
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      #     git fetch origin
+      #     git pull --no-ff --no-commit origin deploy/testing
+      #     git status
+      #     git commit -m"merge from deploy/testing into main"
+      #     git push origin main
