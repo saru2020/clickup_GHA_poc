@@ -19,8 +19,10 @@ jobs:
           SOURCE_BRANCH: ${{ github.ref_name }}
           DESTINATION_BRANCH: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            echo "output - created PR: $PR_NUMBER"
+
+      - name: log it
+        run: |
+          echo "output - created PR: $PR_NUMBER"
 
       # - name: Create Pull Request
       #   id: create_pull_request
