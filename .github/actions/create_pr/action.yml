@@ -33,9 +33,11 @@ runs:
             "base": "'"$DESTINATION_BRANCH"'"
         }'
         echo "DATA: $DATA"
+        URL="$BASE_URL/repos/$REPO/pulls"
+        echo "URL: $URL"
 
         # Create Pull Request
-        PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
+        PR_RESPONSE=$(curl -X POST "$URL" \
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
         -d "$DATA")
