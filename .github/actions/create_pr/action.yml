@@ -38,7 +38,7 @@ runs:
         PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
         -H "Authorization: Bearer ${{ inputs.GITHUB_PAT }}" \
         -H "Content-Type: application/json" \
-        -d $DATA)
+        -d "$DATA")
 
         # Extract Pull Request Number
         echo "PR_RESPONSE: $PR_RESPONSE"
