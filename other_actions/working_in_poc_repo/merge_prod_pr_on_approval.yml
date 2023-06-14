@@ -27,8 +27,8 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "commit_title": "Merge pull request #$PR_NUMBER",
-              "commit_message": "Auto-merge pull request #$PR_NUMBER",
+              "commit_title": "Merge pull request ${{ format('#{0}', $PR_NUMBER) }}",
+              "commit_message": "Auto-merge pull request ${{ format('#{0}', $PR_NUMBER) }}",
               "merge_method": "merge"
             }'
 
