@@ -19,6 +19,7 @@ jobs:
           SOURCE_BRANCH: ${{ github.ref_name }}
           DESTINATION_BRANCH: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
 
       - name: log it
         run: |

@@ -11,6 +11,9 @@ inputs:
   GITHUB_PAT:
     description: "GitHub PAT"
     required: true
+  REPO:
+    description: "repo"
+    required: true
 
 runs:
   using: "composite"
@@ -21,7 +24,7 @@ runs:
       shell: bash
       run: |
         BASE_URL="https://api.github.com"
-        REPO="${{ github.repository }}"
+        REPO="${{ inputs.repository }}"
         DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
         SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
         
