@@ -16,7 +16,7 @@ jobs:
           BASE_URL="https://api.github.com"
           REPO="${{ github.repository }}"
           BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
-          SOURCE_BRANCH="${{ github.ref }}"
+          SOURCE_BRANCH="${{ github.ref_name }}"
           echo "SOURCE_BRANCH: $SOURCE_BRANCH"
 
           # Create Pull Request
