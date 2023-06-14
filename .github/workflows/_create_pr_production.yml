@@ -15,6 +15,7 @@ jobs:
           BASE_URL="https://api.github.com"
           REPO="${{ github.repository }}"
           BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}"
+          SOURCE_BRANCH="${{ github.ref_name }}"
 
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
@@ -22,7 +23,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
               "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}",
-              "head": "main",
+              "head": "$SOURCE_BRANCH",
               "base": "'"$BRANCH"'"
             }')
 
