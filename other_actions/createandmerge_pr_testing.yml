@@ -20,10 +20,10 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deploy/testing
-          commit-message: "Merge main into deploy/testing"
-          title: "Merge main into deploy/testing"
-          body: "This pull request merges changes from the main branch into the deploy/testing branch."
+          branch: ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}
+          commit-message: "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
+          title: "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
+          body: "This pull request merges changes from the main branch into the ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }} branch."
           labels: "automerge"
 
       - name: Merge Pull Request

@@ -15,17 +15,14 @@ jobs:
         run: |
           BASE_URL="https://api.github.com"
           REPO="${{ github.repository }}"
-          BRANCH="deploy/testing"
-          echo "branch?: ${{ github.ref}}"
-          echo "branch?: ${{ github.head_ref}}"
-
+          BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
 
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "title": "Merge main into deploy/testing",
+              "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}",
               "head": "main",
               "base": "'"$BRANCH"'"
             }')
@@ -37,7 +34,7 @@ jobs:
 
           echo "Created Pull Request #$PR_NUMBER"
 
-      - name: Merge Pull Request to deploy/testing
+      - name: Merge Pull Request to ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: merge_pull_request
         run: |
