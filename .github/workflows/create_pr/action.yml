@@ -1,0 +1,40 @@
+name: "Create PR"
+description: "Create PR"
+
+inputs:
+  SOURCE_BRANCH:
+    description: "source branch from which the PR has to be created"
+    required: true
+  DESTINATION_BRANCH:
+    description: "destination branch to which the PR has to be created"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Create Pull Request
+      id: create_pull_request
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        BASE_URL="https://api.github.com"
+        REPO="${{ github.repository }}"
+        DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
+        SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
+        
+        # Create Pull Request
+        PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
+        -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "title": "Merge main into "'"$DESTINATION_BRANCH"'" ",
+            "head": "'"$SOURCE_BRANCH"'",
+            "base": "'"$DESTINATION_BRANCH"'"
+        }')
+
+        # Extract Pull Request Number
+        PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
+
+        echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+        echo "Created Pull Request #$PR_NUMBER"
