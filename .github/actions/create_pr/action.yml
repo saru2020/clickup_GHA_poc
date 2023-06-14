@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: |
         BASE_URL="https://api.github.com"
-        REPO="${{ inputs.repository }}"
+        REPO="${{ inputs.REPO }}"
         DESTINATION_BRANCH="${{ inputs.DESTINATION_BRANCH }}"
         SOURCE_BRANCH="${{ inputs.SOURCE_BRANCH }}"
         
