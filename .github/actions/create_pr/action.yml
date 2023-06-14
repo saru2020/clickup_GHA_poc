@@ -19,9 +19,6 @@ runs:
   using: "composite"
 
   steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
-
     - name: Create Pull Request
       id: create_pull_request
       shell: bash
