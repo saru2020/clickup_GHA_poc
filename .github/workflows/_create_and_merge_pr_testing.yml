@@ -26,7 +26,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
               "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}",
-              "head": "$SOURCE_BRANCH",
+              "head": "'"$SOURCE_BRANCH"'",
               "base": "'"$BRANCH"'"
             }')
 
