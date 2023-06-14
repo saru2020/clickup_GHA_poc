@@ -11,12 +11,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        
+
       - name: Create PR from ${{ github.ref_name }} into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: ./.github/actions/create_pr
         with:
           SOURCE_BRANCH: ${{ github.ref_name }}
           DESTINATION_BRANCH: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
           run: |
             echo "output - created PR: $PR_NUMBER"
 
