@@ -18,6 +18,7 @@ jobs:
           BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
           SOURCE_BRANCH="${{ github.ref_name }}"
 
+          
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
