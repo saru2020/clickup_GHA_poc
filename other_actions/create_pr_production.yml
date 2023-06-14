@@ -17,6 +17,6 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deploy/production
-          title: "Merge main into deploy/production"
-          body: "This pull request merges changes from the main branch into the deploy/production branch."
+          branch: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
+          title: "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}"
+          body: "This pull request merges changes from the main branch into the ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }} branch."

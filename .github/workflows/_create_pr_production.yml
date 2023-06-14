@@ -14,14 +14,14 @@ jobs:
         run: |
           BASE_URL="https://api.github.com"
           REPO="${{ github.repository }}"
-          BRANCH="deploy/production"
+          BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}"
 
           # Create Pull Request
           PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "title": "Merge main into deploy/production",
+              "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}",
               "head": "main",
               "base": "'"$BRANCH"'"
             }')

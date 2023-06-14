@@ -1,4 +1,4 @@
-name: Merge Pull Request from main to deploy/testing
+name: Merge Pull Request from main to ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
           OWNER="${{ github.repository_owner }}"
           REPO="${{ github.repository }}"
           SOURCE_BRANCH="main"
-          TARGET_BRANCH="deploy/testing"
+          TARGET_BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }}"
 
           # Get Pull Request Number
           PR_NUMBER=$(curl -s "$BASE_URL/repos/$OWNER/$REPO/pulls?state=closed&base=$TARGET_BRANCH&head=$OWNER:$SOURCE_BRANCH" \
@@ -42,15 +42,15 @@ jobs:
             echo "No Pull Request found"
           fi
 
-      - name: Pull Changes from deploy/testing to main
-        if: steps.merge_pull_request.outputs.result == 'merged'
-        run: |
-          git fetch origin
-          git checkout -b deploy-testing origin/deploy/testing
-          git merge --no-ff --no-commit origin/deploy/testing
-          # Additional steps to handle the merged changes
+      # - name: Pull Changes from ${{ vars.PROPERTY_MANAGEMENT_MODULE_TESTING_BRANCH }} to main
+      #   if: steps.merge_pull_request.outputs.result == 'merged'
+      #   run: |
+      #     git fetch origin
+      #     git checkout -b deploy-testing origin/deploy/testing
+      #     git merge --no-ff --no-commit origin/deploy/testing
+      #     # Additional steps to handle the merged changes
 
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git commit -m "Merge changes from deploy/testing to main"
-          git push origin main
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      #     git commit -m "Merge changes from deploy/testing to main"
+      #     git push origin main
