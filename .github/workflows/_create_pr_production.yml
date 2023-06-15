@@ -24,26 +24,3 @@ jobs:
       - name: log it
         run: |
           echo "output - created PR: $PR_NUMBER"
-
-      # - name: Create Pull Request
-      #   id: create_pull_request
-      #   run: |
-      #     BASE_URL="https://api.github.com"
-      #     REPO="${{ github.repository }}"
-      #     BRANCH="${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}"
-      #     SOURCE_BRANCH="${{ github.ref_name }}"
-
-      #     # Create Pull Request
-      #     PR_RESPONSE=$(curl -X POST "$BASE_URL/repos/$REPO/pulls" \
-      #       -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-      #       -H "Content-Type: application/json" \
-      #       -d '{
-      #         "title": "Merge main into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}",
-      #         "head": "'"$SOURCE_BRANCH"'",
-      #         "base": "'"$BRANCH"'"
-      #       }')
-
-      #     # Extract Pull Request Number
-      #     PR_NUMBER=$(echo "$PR_RESPONSE" | jq -r '.number')
-
-      #     echo "Created Pull Request #$PR_NUMBER"
