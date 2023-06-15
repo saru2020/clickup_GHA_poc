@@ -14,7 +14,7 @@ jobs:
 
       - name: Create PR from ${{ github.ref_name }} into ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: ./.github/actions/create_pr
+        uses: ./.github/actions/create-pr
         with:
           SOURCE_BRANCH: ${{ github.ref_name }}
           DESTINATION_BRANCH: ${{ vars.PROPERTY_MANAGEMENT_MODULE_PRODUCTION_BRANCH }}
