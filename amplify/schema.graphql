@@ -1,0 +1,10 @@
+type Sample
+  @model(subscriptions: null)
+  @auth(rules: [{ allow: private }, { allow: private, provider: iam }]) {
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  email: AWSEmail!
+  dummy1: String
+}
