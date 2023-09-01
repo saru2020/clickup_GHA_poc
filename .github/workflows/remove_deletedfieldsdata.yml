@@ -46,36 +46,37 @@ jobs:
         cp temp_destination/amplify/schema.graphql temp_destination/destination_schema.graphql
         echo "destination_schema.graphql: $(<temp_destination/destination_schema.graphql)"
 
-    - name: Fetch source branch
-      run: git fetch origin ${{ github.event.pull_request.head.ref }}
+    # - name: Fetch source branch
+    #   run: git fetch origin ${{ github.event.pull_request.head.ref }}
 
-    - name: Checkout source branch
-      run: git --work-tree=temp_source checkout FETCH_HEAD
+    # - name: Checkout source branch
+    #   run: git --work-tree=temp_source checkout FETCH_HEAD
 
-    - name: Copy schema from source branch
-      run: |
-        echo "Copy schema from source branch - ls: --"
-        ls
-        echo "temp_source/amplify: --"
-        ls temp_source/amplify
-        cp temp_source/amplify/schema.graphql temp_source/source_schema.graphql
+    # - name: Copy schema from source branch
+    #   run: |
+    #     echo "Copy schema from source branch - ls: --"
+    #     ls
+    #     echo "temp_source/amplify: --"
+    #     ls temp_source/amplify
+    #     cp temp_source/amplify/schema.graphql temp_source/source_schema.graphql
 
-    - name: Print temporary directories
-      run: |
-        echo "ls: --"
-        ls
-        echo "ls -a: --"
-        ls -a
-        echo "temp_destination: --"
-        ls temp_destination
-        echo "temp_source: --"
-        ls temp_source
+    # - name: Print temporary directories
+    #   run: |
+    #     echo "ls: --"
+    #     ls
+    #     echo "ls -a: --"
+    #     ls -a
+    #     echo "temp_destination: --"
+    #     ls temp_destination
+    #     echo "temp_source: --"
+    #     ls temp_source
 
     - name: Find Removed Fields
       run: |
-        echo "source_schema.graphql: $(<temp_source/source_schema.graphql)"
+        # echo "source_schema.graphql: $(<temp_source/source_schema.graphql)"
         echo "destination_schema.graphql: $(<temp_destination/destination_schema.graphql)"
-        ts-node tools/find-removed-fields.ts temp_source/source_schema.graphql temp_destination/destination_schema.graphql
+        # ts-node tools/find-removed-fields.ts temp_source/source_schema.graphql temp_destination/destination_schema.graphql
+        ts-node tools/find-removed-fields.ts amplify/schema.graphql temp_destination/destination_schema.graphql
 
     - name: Clean up temporary directories
       run: |
