@@ -13,7 +13,6 @@ type Sample2 {
   lastName: String
   phone: String!
   dummy1: String
-  dummy2: Int
 }
 
 type Sample3 {  
@@ -21,6 +20,5 @@ type Sample3 {
   name: String!
   lastName: String
   phone: String!
-  dummy1: String
   dummy2: Int
 }
