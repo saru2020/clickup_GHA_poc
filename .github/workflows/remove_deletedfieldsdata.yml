@@ -49,6 +49,8 @@ jobs:
       run: |
         echo "Copy schema from source branch - ls: --"
         ls
+        echo "temp_source/amplify: --"
+        ls temp_source/amplify
         cp temp_source/amplify/schema.graphql temp_source/source_schema.graphql
 
     - name: Print temporary directories
