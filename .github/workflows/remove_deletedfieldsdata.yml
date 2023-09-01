@@ -65,8 +65,8 @@ jobs:
     - name: Find Removed Fields
       run: |
         echo "source_schema.graphql: $(<temp_source/source_schema.graphql)"
-        echo "destination_schema.graphql: $(<temp_destination/amplify/destination_schema.graphql)"
-        ts-node tools/find-removed-fields.ts temp_destination/amplify/destination_schema.graphql temp_source/amplify/source_schema.graphql
+        echo "destination_schema.graphql: $(<temp_destination/destination_schema.graphql)"
+        ts-node tools/find-removed-fields.ts temp_destination/destination_schema.graphql temp_source/source_schema.graphql
 
     - name: Clean up temporary directories
       run: |
