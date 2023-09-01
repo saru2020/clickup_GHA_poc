@@ -25,24 +25,34 @@ jobs:
     - name: Install ts-node
       run: npm -g install ts-node
 
+    - name: Create temporary directories
+      run: |
+        mkdir -p temp_source
+        mkdir -p temp_destination
+
     - name: Fetch base branch
       run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
     - name: Checkout base branch
-      run: git checkout FETCH_HEAD
+      run: git --work-tree=temp_destination checkout FETCH_HEAD
 
     - name: Copy schema from base branch
-      run: cp amplify/schema.graphql destination_schema.graphql
+      run: cp amplify/schema.graphql temp_destination/destination_schema.graphql
 
-    # - name: Fetch source branch
-    #   run: git fetch origin ${{ github.event.pull_request.head.ref }}
+    - name: Fetch source branch
+      run: git fetch origin ${{ github.event.pull_request.head.ref }}
 
-    # - name: Checkout source branch
-    #   run: git checkout FETCH_HEAD
+    - name: Checkout source branch
+      run: git --work-tree=temp_source checkout FETCH_HEAD
 
-    # - name: Copy schema from source branch
-    #   run: cp amplify/schema.graphql source_schema.graphql
+    - name: Copy schema from source branch
+      run: cp amplify/schema.graphql temp_source/source_schema.graphql
 
     - name: Find Removed Fields
       run: |
-        ts-node tools/find-removed-fields.ts destination_schema.graphql amplify/schema.graphql
+        ts-node tools/find-removed-fields.ts temp_destination/destination_schema.graphql temp_source/source_schema.graphql
+
+    - name: Clean up temporary directories
+      run: |
+        rm -rf temp_source
+        rm -rf temp_destination
