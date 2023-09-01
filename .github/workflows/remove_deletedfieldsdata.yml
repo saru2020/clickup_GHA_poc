@@ -37,7 +37,10 @@ jobs:
       run: git --work-tree=temp_destination checkout FETCH_HEAD
 
     - name: Copy schema from base branch
-      run: cp temp_destination/amplify/schema.graphql temp_destination/destination_schema.graphql
+      run: |
+        echo "temp_destination/amplify/schema.graphql: $(<temp_destination/amplify/schema.graphql)"
+        cp temp_destination/amplify/schema.graphql temp_destination/destination_schema.graphql
+        echo "destination_schema.graphql: $(<temp_destination/destination_schema.graphql)"
 
     - name: Fetch source branch
       run: git fetch origin ${{ github.event.pull_request.head.ref }}
