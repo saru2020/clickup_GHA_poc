@@ -46,7 +46,10 @@ jobs:
       run: git --work-tree=temp_source checkout FETCH_HEAD
 
     - name: Copy schema from source branch
-      run: cp temp_source/amplify/schema.graphql temp_source/source_schema.graphql
+      run: |
+        echo "Copy schema from source branch - ls: --"
+        ls
+        cp temp_source/amplify/schema.graphql temp_source/source_schema.graphql
 
     - name: Print temporary directories
       run: |
@@ -61,7 +64,7 @@ jobs:
 
     - name: Find Removed Fields
       run: |
-        echo "source_schema.graphql: $(<amplify/schema.graphql)"
+        echo "source_schema.graphql: $(<temp_source/source_schema.graphql)"
         echo "destination_schema.graphql: $(<temp_destination/amplify/destination_schema.graphql)"
         ts-node tools/find-removed-fields.ts temp_destination/amplify/destination_schema.graphql temp_source/amplify/source_schema.graphql
 
