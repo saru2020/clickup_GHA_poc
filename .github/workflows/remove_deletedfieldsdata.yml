@@ -50,13 +50,13 @@ jobs:
 
     - name: Print temporary directories
       run: |
-        echo "ls"
+        echo "ls: --"
         ls
-        echo "ls -a"
+        echo "ls -a: --"
         ls -a
-        echo "temp_destination"
+        echo "temp_destination: --"
         ls temp_destination
-        echo "temp_source"
+        echo "temp_source: --"
         ls temp_source
 
     - name: Find Removed Fields
