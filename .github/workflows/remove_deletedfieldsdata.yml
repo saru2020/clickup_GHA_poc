@@ -25,10 +25,12 @@ jobs:
     - name: Extract schema changes
       id: extract-schema
       run: |
-        git checkout ${{ github.base_ref }}
+        # Checkout the source branch
+        git checkout ${{ github.event.pull_request.head.ref }}
         cp amplify/schema.graphql source_schema.graphql
 
-        git checkout ${{ github.ref }}
+        # Checkout the base branch
+        git checkout ${{ github.event.pull_request.base.ref }}
         cp amplify/schema.graphql destination_schema.graphql
 
     - name: Find Removed Fields
