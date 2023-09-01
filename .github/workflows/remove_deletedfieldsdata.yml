@@ -43,6 +43,17 @@ jobs:
     - name: Copy schema from base branch
       run: cp amplify/schema.graphql destination_schema.graphql
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
     - name: Find Removed Fields
       run: |
         ts-node tools/find-removed-fields.ts source_schema.graphql destination_schema.graphql
