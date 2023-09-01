@@ -34,14 +34,14 @@ jobs:
     - name: Copy schema from base branch
       run: cp amplify/schema.graphql destination_schema.graphql
 
-    - name: Fetch source branch
-      run: git fetch origin ${{ github.event.pull_request.head.ref }}
+    # - name: Fetch source branch
+    #   run: git fetch origin ${{ github.event.pull_request.head.ref }}
 
-    - name: Checkout source branch
-      run: git checkout FETCH_HEAD
+    # - name: Checkout source branch
+    #   run: git checkout FETCH_HEAD
 
-    - name: Copy schema from source branch
-      run: cp amplify/schema.graphql source_schema.graphql
+    # - name: Copy schema from source branch
+    #   run: cp amplify/schema.graphql source_schema.graphql
 
     - name: Find Removed Fields
       run: |
