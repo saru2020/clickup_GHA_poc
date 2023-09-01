@@ -48,9 +48,16 @@ jobs:
     - name: Copy schema from source branch
       run: cp amplify/schema.graphql temp_source/source_schema.graphql
 
+    - name: Print temporary directories
+      run: |
+        ls
+        ls -a
+        ls temp_destination
+        ls temp_source
+
     - name: Find Removed Fields
       run: |
-        ts-node tools/find-removed-fields.ts temp_source/source_schema.graphql temp_destination/destination_schema.graphql
+        ts-node tools/find-removed-fields.ts temp_destination/destination_schema.graphql temp_source/source_schema.graphql
 
     - name: Clean up temporary directories
       run: |
