@@ -27,7 +27,6 @@ jobs:
 
     - name: Create temporary directories
       run: |
-        # mkdir -p temp_source
         mkdir -p temp_destination
 
     - name: Fetch base branch
@@ -36,17 +35,9 @@ jobs:
     - name: Checkout base branch
       run: git --work-tree=temp_destination checkout FETCH_HEAD
 
-    # - name: Copy schema from base branch
-    #   run: |
-    #     cp temp_destination/amplify/schema.graphql temp_destination/destination_schema.graphql
-        
     - name: Find Removed Fields
-      run: |
-        # echo "destination_schema.graphql: $(<temp_destination/destination_schema.graphql)"
-        # ts-node tools/find-removed-fields.ts amplify/schema.graphql temp_destination/destination_schema.graphql
-        ts-node tools/find-removed-fields.ts amplify/schema.graphql temp_destination/amplify/schema.graphql
+      run: ts-node tools/find-removed-fields.ts amplify/schema.graphql temp_destination/amplify/schema.graphql
 
     - name: Clean up temporary directories
       run: |
-        rm -rf temp_source
         rm -rf temp_destination
