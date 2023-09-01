@@ -1,1 +1,25 @@
+type Sample1 {
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  dummy1: String
+  dummy2: Int
+}
 
+type Sample2 {  
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  dummy1: String
+  dummy2: Int
+}
+
+type Sample3 {  
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  dummy2: Int
+}
