@@ -45,4 +45,4 @@ jobs:
 
     - name: Find Removed Fields
       run: |
-        ts-node tools/find-removed-fields.ts amplify/schema.graphql source_schema.graphql
+        ts-node tools/find-removed-fields.ts destination_schema.graphql amplify/schema.graphql
