@@ -50,7 +50,7 @@ jobs:
 
     - name: Find Removed Fields
       run: |
-        ts-node tools/find-removed-fields.ts temp_destination/destination_schema.graphql temp_source/source_schema.graphql
+        ts-node tools/find-removed-fields.ts temp_source/source_schema.graphql temp_destination/destination_schema.graphql
 
     - name: Clean up temporary directories
       run: |
