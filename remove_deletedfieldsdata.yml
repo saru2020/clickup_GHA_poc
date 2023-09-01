@@ -1,0 +1,36 @@
+name: Update DynamoDB on Schema Changes
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  updateDynamoDB:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Extract schema changes
+      id: extract-schema
+      run: |
+        git checkout ${{ github.event.before }}
+        cp amplify/schema.graphql source_schema.graphql
+
+        git checkout ${{ github.event.after }}
+        cp amplify/schema.graphql destination_schema.graphql
+
+    - name: Find Removed Fields
+      run: |
+        ts-node tools/find-removed-fields source_schema.graphql destination_schema.graphql

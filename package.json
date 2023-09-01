@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "@octokit/rest": "^19.0.11"
+    "@octokit/rest": "^19.0.11",
+    "graphql": "^16.8.0",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7"
   }
 }

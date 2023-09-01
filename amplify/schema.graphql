@@ -1,10 +1,26 @@
-type Sample
-  @model(subscriptions: null)
-  @auth(rules: [{ allow: private }, { allow: private, provider: iam }]) {
+type Sample1 {
   id: ID!
   name: String!
   lastName: String
   phone: String!
-  email: AWSEmail!
   dummy1: String
+  dummy2: Int
+}
+
+type Sample2 {  
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  dummy1: String
+  dummy2: Int
+}
+
+type Sample3 {  
+  id: ID!
+  name: String!
+  lastName: String
+  phone: String!
+  dummy1: String
+  dummy2: Int
 }
