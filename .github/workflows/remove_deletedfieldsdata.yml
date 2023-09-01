@@ -25,15 +25,6 @@ jobs:
     - name: Install ts-node
       run: npm -g install ts-node
 
-    - name: Fetch source branch
-      run: git fetch origin ${{ github.event.pull_request.head.ref }}
-
-    - name: Checkout source branch
-      run: git checkout FETCH_HEAD
-
-    - name: Copy schema from source branch
-      run: cp amplify/schema.graphql source_schema.graphql
-
     - name: Fetch base branch
       run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
@@ -43,16 +34,14 @@ jobs:
     - name: Copy schema from base branch
       run: cp amplify/schema.graphql destination_schema.graphql
 
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Fetch source branch
+      run: git fetch origin ${{ github.event.pull_request.head.ref }}
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 18
+    - name: Checkout source branch
+      run: git checkout FETCH_HEAD
 
-    - name: Install dependencies
-      run: npm install
+    - name: Copy schema from source branch
+      run: cp amplify/schema.graphql source_schema.graphql
 
     - name: Find Removed Fields
       run: |
