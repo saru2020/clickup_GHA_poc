@@ -13,6 +13,7 @@ type Sample2 {
   lastName: String
   phone: String!
   dummy1: String
+  dummy2: Int
 }
 
 type Sample3 {  
@@ -20,4 +21,13 @@ type Sample3 {
   name: String!
   lastName: String
   phone: String!
+  dummy2: Int
+}
+
+type ExternalManager
+  @model(subscriptions: null)
+  @auth(rules: [{ allow: private }, { allow: private, provider: iam }]) {
+  id: ID!
+  name: String!
+  lastName: String
 }
