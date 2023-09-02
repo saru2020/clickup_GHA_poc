@@ -36,7 +36,7 @@ jobs:
       run: git --work-tree=temp_destination checkout FETCH_HEAD
 
     - name: Find Removed Fields
-      run: ts-node tools/find-removed-fields.ts amplify/schema.graphql temp_destination/amplify/schema.graphql
+      run: ts-node tools/find-removed-fields.ts temp_destination/amplify/schema.graphql amplify/schema.graphql
 
     - name: Clean up temporary directories
       run: |
