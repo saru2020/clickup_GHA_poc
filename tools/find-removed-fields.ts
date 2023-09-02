@@ -1,23 +1,19 @@
-import * as fs from 'fs';
-import { buildASTSchema, parse, ObjectTypeDefinitionNode, GraphQLObjectType } from 'graphql';
+import * as fs from "fs";
+import { parse, ObjectTypeDefinitionNode } from "graphql";
 
-// console.log('process.argv[0]: ', process.argv[0]);
-// console.log('process.argv[1]: ', process.argv[1]);
-// console.log('process.argv[2]: ', process.argv[2]);
-// console.log('process.argv[3]: ', process.argv[3]);
+const sourceSchemaFile = fs.readFileSync(process.argv[2], "utf-8");
+const amplifyGeneratedSchemaFile = fs.readFileSync(process.argv[3], "utf-8");
 
-const schemaText = fs.readFileSync(process.argv[3], 'utf-8');
-const sourceSchema = fs.readFileSync(process.argv[2], 'utf-8');
+const sourceSchemaAST = parse(sourceSchemaFile);
+const amplifyGeneratedSchemaAST = parse(amplifyGeneratedSchemaFile);
 
-const schema = buildASTSchema(parse(schemaText));
-const sourceSchemaAST = parse(sourceSchema);
-
-const entityTypes = schema.getTypeMap();
 const sourceEntityTypes = sourceSchemaAST.definitions
-  .filter(def => def.kind === 'ObjectTypeDefinition')
-  .map(def => (def as ObjectTypeDefinitionNode).name.value);
+  .filter((def) => def.kind === "ObjectTypeDefinition")
+  .map((def) => (def as ObjectTypeDefinitionNode).name.value);
 
-// console.log('Entities:', sourceEntityTypes.join(', '));
+const amplifyGeneratedEntityTypes = amplifyGeneratedSchemaAST.definitions
+  .filter((def) => def.kind === "ObjectTypeDefinition")
+  .map((def) => (def as ObjectTypeDefinitionNode).name.value);
 
 interface RemovedFieldsMap {
   [entityType: string]: string[];
@@ -26,25 +22,36 @@ interface RemovedFieldsMap {
 const removedFieldsMap: RemovedFieldsMap = {};
 
 for (const entityType of sourceEntityTypes) {
-  if (!entityTypes[entityType]) {
-    console.log(`!!! WARNING !!! - Entity "${entityType}" not found in the schema.`);
+  if (!amplifyGeneratedEntityTypes.includes(entityType)) {
+    console.log(
+      `!!! WARNING !!! - Entity "${entityType}" not found in the Amplify-generated schema.`,
+    );
     continue;
   }
 
-  const entityFields = (entityTypes[entityType] as GraphQLObjectType).getFields();
+  const entityFields =
+    (
+      amplifyGeneratedSchemaAST.definitions.find(
+        (def) =>
+          def.kind === "ObjectTypeDefinition" &&
+          (def as ObjectTypeDefinitionNode).name.value === entityType,
+      ) as ObjectTypeDefinitionNode
+    ).fields?.map((field) => field.name.value) || [];
 
-  const sourceEntityDefinition = sourceSchemaAST.definitions
-    .find(def => def.kind === 'ObjectTypeDefinition' && (def as ObjectTypeDefinitionNode).name.value === entityType) as ObjectTypeDefinitionNode | undefined;
+  const sourceEntityDefinition = sourceSchemaAST.definitions.find(
+    (def) =>
+      def.kind === "ObjectTypeDefinition" &&
+      (def as ObjectTypeDefinitionNode).name.value === entityType,
+  ) as ObjectTypeDefinitionNode | undefined;
 
-  const sourceEntityFields = sourceEntityDefinition?.fields?.map(field => field.name.value) || [];
+  const sourceEntityFields =
+    sourceEntityDefinition?.fields?.map((field) => field.name.value) || [];
 
-  const removedFields = Object.keys(entityFields)
-    .filter(field => !sourceEntityFields.includes(field));
+  const removedFields = sourceEntityFields.filter(
+    (field) => !entityFields.includes(field),
+  );
 
-  // console.log(`Removed Fields for ${entityType}:`, removedFields.join(', '));
-
-  if (removedFields.length > 0)
-    removedFieldsMap[entityType] = removedFields;
+  if (removedFields.length > 0) removedFieldsMap[entityType] = removedFields;
 }
 
-console.log('map: ', removedFieldsMap);
+console.log("map: ", removedFieldsMap);
