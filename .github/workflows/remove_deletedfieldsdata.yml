@@ -87,7 +87,9 @@ jobs:
     - name: Checkout the previous commit
       run: |
         git fetch --all
-        git checkout ${{ github.sha }}^1
+        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 1)
+        git checkout $PREV_COMMIT
+    
         echo "ls here"
         ls -a
         echo "ls done"
