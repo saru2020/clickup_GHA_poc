@@ -93,6 +93,16 @@ jobs:
         echo "ls temp_destination done"
         pwd
         echo "pwd done"
+      
+    - name: Prints temp_destination
+      run: |
+        echo "ls here"
+        ls -a
+        echo "ls done"
+        pwd
+        echo "pwd done"
+      working-directory: temp_destination
+
     # not working
     # - name: Get the SHA of the previous commit
     #   id: prev_commit
