@@ -140,6 +140,13 @@ jobs:
     #   run: git checkout ${{ steps.prev_commit.outputs.sha }}
     #   working-directory: temp_destination
 
+    - name: Print schema.graphql
+      run: |
+        echo "temp_destination/amplify/schema.graphql: "
+        cat temp_destination/amplify/schema.graphql
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+
     - name: Find Removed Fields
       run: node tools/removed_fields_datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
 
