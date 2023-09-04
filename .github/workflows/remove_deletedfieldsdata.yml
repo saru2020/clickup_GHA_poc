@@ -52,6 +52,8 @@ jobs:
     # not working
     - name: Checkout the previous commit
       run: |
+        pwd
+        ls temp_destination/
         git fetch origin
         git status
         git checkout HEAD^
