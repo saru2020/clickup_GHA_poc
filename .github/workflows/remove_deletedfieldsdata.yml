@@ -50,15 +50,24 @@ jobs:
     #   run: git --work-tree=temp_destination checkout $(git rev-parse FETCH_HEAD^1)
 
     # not working
-    - name: Checkout the previous commit
-      run: |
-        pwd
-        ls
-        git fetch origin
-        git status
-        git checkout HEAD^
-      working-directory: temp_destination
+    # - name: Checkout the previous commit
+    #   run: |
+    #     pwd
+    #     ls
+    #     git fetch origin
+    #     git status
+    #     git checkout HEAD^
+    #   working-directory: temp_destination
 
+    - name: Get the SHA of the previous commit
+      id: prev_commit
+      run: |
+        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 1)
+        echo "::set-output name=sha::${PREV_COMMIT}"
+
+    - name: Checkout the previous commit
+      run: git checkout ${{ steps.prev_commit.outputs.sha }}
+      working-directory: temp_destination
 
     # not working
     # - name: Get the SHA of the previous commit
