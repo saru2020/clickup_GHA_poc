@@ -76,6 +76,9 @@ jobs:
 
     - name: Checkout the previous commit
       run: |
+        echo "sha: "
+        echo ${{ steps.prev_commit.outputs.sha }}
+        echo "sha printed"
         git --work-tree=temp_destination checkout ${{ steps.prev_commit.outputs.sha }}
     # - name: Checkout the previous commit
     #   run: |
