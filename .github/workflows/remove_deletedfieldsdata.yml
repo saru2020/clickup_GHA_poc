@@ -73,12 +73,12 @@ jobs:
       working-directory: .
 
     # working
-    - name: Get the SHA of the previous commit
-      id: prev_commit
-      # run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
-      run: |
-        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
-        echo "::set-output name=sha::${PREV_COMMIT}"
+    # - name: Get the SHA of the previous commit
+    #   id: prev_commit
+    #   # run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+    #   run: |
+    #     PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
+    #     echo "::set-output name=sha::${PREV_COMMIT}"
 
     # - name: Checkout the previous commit
     #   run: |
@@ -121,6 +121,26 @@ jobs:
         pwd
         echo "pwd done"
       working-directory: temp_destination
+
+    - name: git status temp_destination
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+      working-directory: temp_destination
+
+    - name: git status dot
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+      working-directory: .
+
+    - name: git status dot
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
 
     # not working
     # - name: Get the SHA of the previous commit
