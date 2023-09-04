@@ -1,0 +1,56 @@
+name: Update DynamoDB on Schema Changes
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  updateDynamoDB:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    # - name: Install ts-node
+    #   run: npm -g install ts-node
+
+    - name: Create temporary directories
+      run: |
+        mkdir -p temp_destination
+
+    # - name: Fetch base branch
+    #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
+
+    # - name: Checkout base branch
+    #   run: git --work-tree=temp_destination checkout FETCH_HEAD
+    
+    - name: Fetch changes for the PR
+      run: |
+        git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge:
+
+    - name: Get the SHA of the previous commit
+      id: prev_commit
+      run: echo "::set-output name=sha::$(git rev-parse FETCH_HEAD^1)"
+
+    - name: Checkout the PR merge commit
+      run: git --work-tree=temp_destination checkout FETCH_HEAD
+
+    - name: Find Removed Fields
+      run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
+
+    - name: Clean up temporary directories
+      run: |
+        rm -rf temp_destination

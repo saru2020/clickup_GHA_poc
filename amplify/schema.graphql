@@ -30,6 +30,4 @@ type ExternalManager
   id: ID!
   name: String!
   lastName: String
-  phone: String!
-  email: AWSEmail!
 }
