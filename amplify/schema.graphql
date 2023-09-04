@@ -21,7 +21,6 @@ type Sample3 {
   name: String!
   lastName: String
   phone: String!
-  dummy2: Int
 }
 
 type ExternalManager
