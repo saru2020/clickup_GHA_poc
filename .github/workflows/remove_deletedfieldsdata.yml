@@ -67,7 +67,10 @@ jobs:
         echo "::set-output name=sha::${PREV_COMMIT}"
 
     - name: Checkout the previous commit
-      run: git checkout ${{ steps.prev_commit.outputs.sha }}
+      run: |
+        git checkout ${{ steps.prev_commit.outputs.sha }}
+        echo "ls here"
+        ls
       working-directory: temp_destination
 
     # not working
