@@ -39,8 +39,8 @@ jobs:
     # - name: Fetch previous commit
     #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
       
-    # - name: Checkout base branch
-    #   run: git --work-tree=temp_destination checkout FETCH_HEAD
+    - name: Checkout base branch
+      run: git --work-tree=temp_destination checkout FETCH_HEAD
 
     # - name: Find Removed Fields
     #   run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
@@ -57,6 +57,14 @@ jobs:
     #     git fetch origin
     #     git status
     #     git checkout HEAD^
+    #   working-directory: temp_destination
+
+    # - name: Checkout the previous commit
+    #   run: |
+    #     pwd
+    #     ls
+    #     git fetch origin
+    #     git status
     #   working-directory: temp_destination
 
     # working
