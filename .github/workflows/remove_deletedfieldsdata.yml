@@ -69,7 +69,7 @@ jobs:
 
     - name: Clone repository with history
       run: |
-        git clone --depth=10 https://github.com/${{ github.repository }} temp_destination
+        git clone --depth=110 https://github.com/${{ github.repository }} temp_destination
       working-directory: .
 
     # working
@@ -92,7 +92,7 @@ jobs:
     - name: Checkout the previous commit
       run: |
         git fetch --all
-        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 1)
+        PREV_COMMIT=$(git log --pretty=format:"%h" -n 100 | tail -n 1)
         echo "PREV_COMMIT: $PREV_COMMIT"
         git checkout $PREV_COMMIT
     
@@ -136,7 +136,7 @@ jobs:
         cat amplify/schema.graphql
       working-directory: .
 
-    - name: git status dot
+    - name: git status
       run: |
         git status
         echo "amplify/schema.graphql: "
