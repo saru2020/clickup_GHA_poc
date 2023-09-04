@@ -81,6 +81,8 @@ jobs:
         echo "ls here"
         ls -a
         echo "ls done"
+        ls temp_destination
+        echo "ls temp_destination done"
         pwd
         echo "pwd done"
     # not working
