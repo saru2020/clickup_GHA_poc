@@ -67,6 +67,11 @@ jobs:
     #     git status
     #   working-directory: temp_destination
 
+    - name: Clone repository with history
+      run: |
+        git clone --depth=1 https://github.com/${{ github.repository }} temp_destination
+      working-directory: .
+
     # working
     - name: Get the SHA of the previous commit
       id: prev_commit
