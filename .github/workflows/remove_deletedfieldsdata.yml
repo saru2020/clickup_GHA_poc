@@ -36,8 +36,8 @@ jobs:
     # - name: Fetch base branch
     #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
-    - name: Fetch previous commit
-      run: git fetch origin ${{ github.event.pull_request.base.ref }}
+    # - name: Fetch previous commit
+    #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
       
     # - name: Checkout base branch
     #   run: git --work-tree=temp_destination checkout FETCH_HEAD
@@ -55,9 +55,18 @@ jobs:
     #   working-directory: temp_destination
 
 
+    # not working
+    # - name: Get the SHA of the previous commit
+    #   id: prev_commit
+    #   run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+
+    # - name: Checkout the previous commit
+    #   run: git checkout ${{ steps.prev_commit.outputs.sha }}
+    #   working-directory: temp_destination
+
     - name: Get the SHA of the previous commit
       id: prev_commit
-      run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+      run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}~1)"
 
     - name: Checkout the previous commit
       run: git checkout ${{ steps.prev_commit.outputs.sha }}
