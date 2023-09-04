@@ -70,9 +70,10 @@ jobs:
     # working
     - name: Get the SHA of the previous commit
       id: prev_commit
-      run: |
-        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
-        echo "::set-output name=sha::${PREV_COMMIT}"
+      run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+      # run: |
+      #   PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
+      #   echo "::set-output name=sha::${PREV_COMMIT}"
 
     - name: Checkout the previous commit
       run: |
