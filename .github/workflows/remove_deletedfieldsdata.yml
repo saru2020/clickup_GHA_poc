@@ -59,6 +59,7 @@ jobs:
     #     git checkout HEAD^
     #   working-directory: temp_destination
 
+    # working
     - name: Get the SHA of the previous commit
       id: prev_commit
       run: |
@@ -88,7 +89,7 @@ jobs:
     #   working-directory: temp_destination
 
     - name: Find Removed Fields
-      run: node tools/removed_fields/datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
+      run: node tools/removed_fields_datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
 
     - name: Clean up temporary directories
       run: |
