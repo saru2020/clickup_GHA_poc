@@ -93,7 +93,8 @@ jobs:
       run: |
         git fetch --all
         PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 1)
-        git checkout $PREV_COMMIT^1
+        echo "PREV_COMMIT: $PREV_COMMIT"
+        git checkout $PREV_COMMIT
     
         echo "ls here"
         ls -a
