@@ -46,7 +46,7 @@ jobs:
     #   run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
 
     - name: Checkout to previous commit
-      run: git --work-tree=temp_destination checkout HEAD^1
+      run: git --work-tree=temp_destination checkout $(git rev-parse FETCH_HEAD^1)
 
     - name: Find Removed Fields
       run: node tools/removed_fields/datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
