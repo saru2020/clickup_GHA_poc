@@ -1,12 +1,10 @@
 name: Update DynamoDB on Schema Changes
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types:
-      - closed
+      - opened
+      - synchronize
 
 jobs:
   updateDynamoDB:
@@ -37,9 +35,14 @@ jobs:
     # - name: Checkout base branch
     #   run: git --work-tree=temp_destination checkout FETCH_HEAD
     
+    - name: prints
+      run: |
+        echo ${{ github.event.pull_request.base.ref }}
+        echo ${{ github.event.pull_request.head.ref }}
+        echo ${{ github.event.pull_request.number }}
     - name: Fetch changes for the PR
       run: |
-        git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge:
+        git fetch origin +refs/pull/120/merge:
 
     - name: Get the SHA of the previous commit
       id: prev_commit
