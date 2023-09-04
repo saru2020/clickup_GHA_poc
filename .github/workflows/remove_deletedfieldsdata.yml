@@ -75,24 +75,25 @@ jobs:
         PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
         echo "::set-output name=sha::${PREV_COMMIT}"
 
+    # - name: Checkout the previous commit
+    #   run: |
+    #     git fetch --all
+    #     echo "sha: "
+    #     echo ${{ github.sha }}
+    #     echo "github.sha printed"
+    #     echo ${{ steps.prev_commit.outputs.sha }}
+    #     echo "steps.prev_commit.outputs.sha printed"
+    #     git --work-tree=temp_destination checkout ${{ github.sha }}^1
     - name: Checkout the previous commit
       run: |
         git fetch --all
-        echo "sha: "
-        echo ${{ github.sha }}
-        echo "github.sha printed"
-        echo ${{ steps.prev_commit.outputs.sha }}
-        echo "steps.prev_commit.outputs.sha printed"
-        git --work-tree=temp_destination checkout ${{ github.sha }}^1
-    # - name: Checkout the previous commit
-    #   run: |
-    #     git checkout ${{ steps.prev_commit.outputs.sha }}
-    #     echo "ls here"
-    #     ls -a
-    #     echo "ls done"
-    #     pwd
-    #     echo "pwd done"
-    #   working-directory: temp_destination
+        git checkout ${{ github.sha }}^1
+        echo "ls here"
+        ls -a
+        echo "ls done"
+        pwd
+        echo "pwd done"
+      working-directory: temp_destination
 
     - name: Prints
       run: |
