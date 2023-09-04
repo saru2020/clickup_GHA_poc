@@ -92,7 +92,7 @@ jobs:
     - name: Checkout the previous commit
       run: |
         git fetch --all
-        PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 1)
+        PREV_COMMIT=$(git log --pretty=format:"%h" -n 3 | tail -n 1)
         echo "PREV_COMMIT: $PREV_COMMIT"
         git checkout $PREV_COMMIT
     
