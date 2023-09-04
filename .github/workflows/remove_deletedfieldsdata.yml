@@ -53,7 +53,7 @@ jobs:
     - name: Checkout the previous commit
       run: |
         pwd
-        ls temp_destination/
+        ls
         git fetch origin
         git status
         git checkout HEAD^
