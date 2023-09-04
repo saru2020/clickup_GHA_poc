@@ -1,0 +1,175 @@
+name: Update DynamoDB on Schema Changes
+
+on:
+  pull_request:
+    types:
+      - closed
+# on:
+#   pull_request:
+#     types:
+#       - opened
+#       - synchronize
+
+jobs:
+  updateDynamoDB:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    # - name: Install ts-node
+    #   run: npm -g install ts-node
+
+    - name: Create temporary directories
+      run: |
+        mkdir -p temp_destination
+
+    # - name: Fetch base branch
+    #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
+
+    # - name: Fetch previous commit
+    #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
+      
+    # - name: Checkout base branch
+    #   run: git --work-tree=temp_destination checkout FETCH_HEAD
+
+    # - name: Find Removed Fields
+    #   run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
+
+    # not working
+    # - name: Checkout to previous commit
+    #   run: git --work-tree=temp_destination checkout $(git rev-parse FETCH_HEAD^1)
+
+    # not working
+    # - name: Checkout the previous commit
+    #   run: |
+    #     pwd
+    #     ls
+    #     git fetch origin
+    #     git status
+    #     git checkout HEAD^
+    #   working-directory: temp_destination
+
+    # - name: Checkout the previous commit
+    #   run: |
+    #     pwd
+    #     ls
+    #     git fetch origin
+    #     git status
+    #   working-directory: temp_destination
+
+    - name: Clone repository with history
+      run: |
+        git clone --depth=110 https://github.com/${{ github.repository }} temp_destination
+      working-directory: .
+
+    # working
+    # - name: Get the SHA of the previous commit
+    #   id: prev_commit
+    #   # run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+    #   run: |
+    #     PREV_COMMIT=$(git log --pretty=format:"%h" -n 2 | tail -n 2)
+    #     echo "::set-output name=sha::${PREV_COMMIT}"
+
+    # - name: Checkout the previous commit
+    #   run: |
+    #     git fetch --all
+    #     echo "sha: "
+    #     echo ${{ github.sha }}
+    #     echo "github.sha printed"
+    #     echo ${{ steps.prev_commit.outputs.sha }}
+    #     echo "steps.prev_commit.outputs.sha printed"
+    #     git --work-tree=temp_destination checkout ${{ github.sha }}^1
+    - name: Checkout the previous commit
+      run: |
+        git fetch --all
+        PREV_COMMIT=$(git log --pretty=format:"%h" -n 100 | tail -n 1)
+        echo "PREV_COMMIT: $PREV_COMMIT"
+        git checkout $PREV_COMMIT
+    
+        echo "ls here"
+        ls -a
+        echo "ls done"
+        pwd
+        echo "pwd done"
+      working-directory: temp_destination
+
+    - name: Prints
+      run: |
+        echo "ls here"
+        ls -a
+        echo "ls done"
+        ls temp_destination
+        echo "ls temp_destination done"
+        pwd
+        echo "pwd done"
+      
+    - name: Prints temp_destination
+      run: |
+        echo "ls here"
+        ls -a
+        echo "ls done"
+        pwd
+        echo "pwd done"
+      working-directory: temp_destination
+
+    - name: git status temp_destination
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+      working-directory: temp_destination
+
+    - name: git status dot
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+      working-directory: .
+
+    - name: git status
+      run: |
+        git status
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+
+    # not working
+    # - name: Get the SHA of the previous commit
+    #   id: prev_commit
+    #   run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+
+    # - name: Checkout the previous commit
+    #   run: git checkout ${{ steps.prev_commit.outputs.sha }}
+    #   working-directory: temp_destination
+
+    # not working
+    # - name: Get the SHA of the previous commit
+    #   id: prev_commit
+    #   run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}~1)"
+
+    # - name: Checkout the previous commit
+    #   run: git checkout ${{ steps.prev_commit.outputs.sha }}
+    #   working-directory: temp_destination
+
+    - name: Print schema.graphql
+      run: |
+        echo "temp_destination/amplify/schema.graphql: "
+        cat temp_destination/amplify/schema.graphql
+        echo "amplify/schema.graphql: "
+        cat amplify/schema.graphql
+
+    - name: Find Removed Fields
+      run: node tools/removed_fields_datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
+
+    - name: Clean up temporary directories
+      run: |
+        rm -rf temp_destination
