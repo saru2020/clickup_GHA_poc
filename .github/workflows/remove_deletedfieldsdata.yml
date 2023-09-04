@@ -70,7 +70,10 @@ jobs:
       run: |
         git checkout ${{ steps.prev_commit.outputs.sha }}
         echo "ls here"
-        ls
+        ls -a
+        echo "ls done"
+        pwd
+        echo "pwd done"
       working-directory: temp_destination
 
     # not working
