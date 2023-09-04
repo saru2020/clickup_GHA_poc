@@ -45,12 +45,24 @@ jobs:
     # - name: Find Removed Fields
     #   run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
 
+    # not working
     # - name: Checkout to previous commit
     #   run: git --work-tree=temp_destination checkout $(git rev-parse FETCH_HEAD^1)
-    - name: Checkout the previous commit
-      run: git checkout HEAD^
-      working-directory: temp_destination
 
+    # not working
+    # - name: Checkout the previous commit
+    #   run: git checkout HEAD^
+    #   working-directory: temp_destination
+
+
+    - name: Get the SHA of the previous commit
+      id: prev_commit
+      run: echo "::set-output name=sha::$(git rev-parse ${{ github.sha }}^1)"
+
+    - name: Checkout the previous commit
+      run: git checkout ${{ steps.prev_commit.outputs.sha }}
+      working-directory: temp_destination
+      
     - name: Find Removed Fields
       run: node tools/removed_fields/datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
 
