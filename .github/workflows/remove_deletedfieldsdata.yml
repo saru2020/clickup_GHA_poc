@@ -3,8 +3,12 @@ name: Update DynamoDB on Schema Changes
 on:
   pull_request:
     types:
-      - opened
-      - synchronize
+      - closed
+# on:
+#   pull_request:
+#     types:
+#       - opened
+#       - synchronize
 
 jobs:
   updateDynamoDB:
@@ -32,27 +36,20 @@ jobs:
     # - name: Fetch base branch
     #   run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
+    - name: Fetch previous commit
+      run: git fetch origin ${{ github.event.pull_request.base.ref }}
+      
     # - name: Checkout base branch
     #   run: git --work-tree=temp_destination checkout FETCH_HEAD
-    
-    - name: prints
-      run: |
-        echo ${{ github.event.pull_request.base.ref }}
-        echo ${{ github.event.pull_request.head.ref }}
-        echo ${{ github.event.pull_request.number }}
-    - name: Fetch changes for the PR
-      run: |
-        git fetch origin +refs/pull/120/merge:
 
-    - name: Get the SHA of the previous commit
-      id: prev_commit
-      run: echo "::set-output name=sha::$(git rev-parse FETCH_HEAD^1)"
+    # - name: Find Removed Fields
+    #   run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
 
-    - name: Checkout the PR merge commit
-      run: git --work-tree=temp_destination checkout FETCH_HEAD
+    - name: Checkout to previous commit
+      run: git --work-tree=temp_destination checkout HEAD^1
 
     - name: Find Removed Fields
-      run: node tools/removed_fields/datamanager/handle_removed_fields.js temp_destination/amplify/schema.graphql amplify/schema.graphql
+      run: node tools/removed_fields/datamanager/handle_removed_fields.js amplify/schema.graphql temp_destination/amplify/schema.graphql
 
     - name: Clean up temporary directories
       run: |
